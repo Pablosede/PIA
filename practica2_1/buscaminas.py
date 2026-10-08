@@ -5,12 +5,14 @@ def generarMatriz(filas, columnas):
 
     minas=0
 
-    while minas<11:
-        filasR = np.random.randint(1,8)
-        colunasR = np.random.randint(1,8)
-        matriz[filasR][colunasR] = -1
-        minas+=1
+    while minas<10:
+        filasR = np.random.randint(0,filas)
+        colunasR = np.random.randint(0,columnas)
+        if matriz[filasR][colunasR]!=-1:
+            matriz[filasR][colunasR] = -1
+            minas+=1
     return matriz
+matriz=generarMatriz(8,8)
 
 #Apartado b:
 def contarMinas(matriz):
@@ -20,48 +22,26 @@ def contarMinas(matriz):
             minas=0
             for i in range (fila-1,fila+2):
                 for j in range (columna-1,columna+2):
-                    if i< matriz.shape[0] and j<matriz.shape[1] and matriz[i, j]==-1 and i>=0 and j>=0:
+                    if i< matriz.shape[0] and j<matriz.shape[1] and matriz[i][j]==-1 and i>=0 and j>=0:
                         minas+=1
             if matriz[fila][columna]!=-1:
                 matriz[fila][columna]=minas
     return matriz
 
-
-
 #Apartado c:
-def descubrir(matriz, visible, i, j):
-    if i < 0 or j<0 or i>=matriz.shape[0] or j>=matriz.shape[1]:
+def descubrir(matriz, filas, columnas):
+    if filas >= matriz.shape[0] or columnas >= matriz.shape[1] or filas<0 or columnas<0:
         return
-    if visible[i, j]:
+    if matriz[filas][columnas]<0:
         return
-    visible[i, j] = True
+    if matriz[filas][columnas]>0:
+        matriz[filas][columnas]=-2
+        return
+    matriz[filas][columnas]=-2
+    for i in range (filas-1,filas+2):
+        for j in range (columnas-1,columnas+2):
+            descubrir(matriz,i,j)
 
-    if matriz[i-1][j-1]!=-1:
-       for k in (-1,0,1):
-           for l in (-1,0,1):
-               descubrir(matriz, visible, i+k, j+l)
-
-def mostrar(matriz, visible):
-    for i in range(matriz.shape[0]):
-        fila= ""
-        for j in range(matriz.shape[1]):
-            if not visible[i, j]:
-                fila+="?"
-            elif matriz[i, j]==-1:
-                fila+="*"
-            else:
-                fila+=str(matriz[i, j])+" "
-        print(fila)
-
-matriz=contarMinas(generarMatriz(8,8))
-visible=np.zeros(matriz.shape)
-
-i, j = 0, 0
-if matriz[i, j] == -1:
-    print("¡Mina! Fin del juego")
-else:
-    descubrir(matriz, visible, i, j)
-
+contarMinas(matriz)
+descubrir(matriz,0,0)
 print(matriz)
-print()
-mostrar(matriz, visible)
