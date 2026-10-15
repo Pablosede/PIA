@@ -18,9 +18,8 @@ def esValidoFila(matriz, fila):
     for i in matriz[fila]:
         if i ==0:
             continue
-        if i >0 & i<=9:
-            if i in filasVistas:
-                return False
+        if i in filasVistas:
+            return False
         filasVistas.append(i)
     return True
 print(esValidoFila(sudoku, 0))
@@ -30,28 +29,23 @@ def esValidoColumna(matriz, columna):
     for i in matriz[:,columna]:
         if i ==0:
             continue
-        if i >0 & i<=9:
-            if i in columnasVistas:
-                return False
+        if i in columnasVistas:
+            return False
         columnasVistas.append(i)
     return True
 print(esValidoColumna(sudoku, 0))
 
 def esValidoCuadro(matriz, fila, columna):
+    inicioFila = (fila // 3) * 3
+    inicioColumna = (columna // 3) * 3
     cuadroValido=[]
-    for i in range(fila, fila+3):
-        for j in range(columna, columna+3):
-            if i ==0:
+    for i in range(inicioFila, inicioFila+3):
+        for j in range(inicioColumna, inicioColumna+3):
+            valor = matriz[i][j]
+            if valor ==0:
                 continue
-            if esValidoFila(matriz, fila):
-                if i in cuadroValido:
-                    return False
-            cuadroValido.append(i)
-            if j ==0:
-                continue
-            if esValidoColumna(matriz, columna):
-                if j in cuadroValido:
-                    return False
-            cuadroValido.append(j)
+            if valor in cuadroValido:
+                return False
+            cuadroValido.append(valor)
     return True
 print(esValidoCuadro(sudoku, 0, 0))
