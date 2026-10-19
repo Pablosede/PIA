@@ -49,3 +49,33 @@ def esValidoCuadro(matriz, fila, columna):
             cuadroValido.append(valor)
     return True
 print(esValidoCuadro(sudoku, 0, 0))
+
+def buscarHueco(matriz):
+    for i in range(9):
+        for j in range(9):
+            if matriz[i][j] == 0:
+                return i, j
+    return None
+
+def resolver(matriz):
+    hueco = buscarHueco(matriz)
+    if hueco is None:
+        return True
+
+    fila, columna = hueco
+    for numero in range(1, 10):
+        matriz[fila][columna] = numero
+        if (esValidoFila(matriz, fila) and
+                esValidoColumna(matriz, columna) and
+                esValidoCuadro(matriz, fila, columna)):
+            if resolver(matriz):
+                return True
+        matriz[fila][columna] = 0
+
+    return False
+
+sudoku = carga("matriz.txt")
+if resolver(sudoku):
+    print(sudoku)
+else:
+    print("El sudoku no tiene solución")
