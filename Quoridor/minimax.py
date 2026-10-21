@@ -65,10 +65,10 @@ def jugadas_a_probar(estado):
         ruta = camino(estado, rival)
         muros = []
         for i in range(len(ruta) - 1):
-            for muro in muros_que_bloquean(ruta[i], ruta[i + 1]):
-                if muro not in muros and muro_cabe(estado, muro):
+            for muro in muros_que_bloquean(ruta[i], ruta[i + 1]): # muros que cortan ese paso
+                if muro not in muros and muro_cabe(estado, muro): # sin repetir y que quepa
                     muros.append(muro)
-        jugadas += muros
+        jugadas += muros  # se añaden después de los movimientos
 
     return jugadas
 
