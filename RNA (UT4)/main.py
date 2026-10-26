@@ -33,7 +33,7 @@ class perceptron:
         self.errores_ = []
 
     def net_input(self, X):
-        return np.dot(X, self.w_[1:]) + self.w_[0]*1
+        return np.dot(X, self.w_[1:]) + self.w_[0]
 
     def predict(self, X):
         return np.where(self.net_input(X) >= 0, 1, -1)
@@ -47,6 +47,8 @@ class perceptron:
                 self.w_[0] += update
                 if update != 0:
                     errors += 1
+                    print("epoca=", i,";", "xi=", xi, ";", "y=", target, "prediccion=", self.predict(xi), ";", "error=",
+                    errors, "pesos=", self.w_)
             # fin de las muestras
             self.errores_.append(errors)
         # termina el bucle de epocas
