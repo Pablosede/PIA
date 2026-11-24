@@ -26,7 +26,7 @@ labels = nx.get_edge_attributes(g,'lenght')
 pos=nx.get_node_attributes(g,'pos')
 print("etiquetas",labels)
 print("Posiciones",pos)
-nx.draw_networkx(g, pos,with_labels=True)
+nx.draw_networkx(g, pos,with_labels=True, node_color='white', edgecolors='black', node_size=800)
 nx.draw_networkx_edge_labels(g, pos,edge_labels=labels)
 plt.show()
 

@@ -74,12 +74,25 @@ def mostrar_grafo(grafo):
 
 if __name__ == "__main__":
     grafo = crear_grafo()
-    #mostrar_grafo(grafo)
+    mostrar_grafo(grafo)
 
     nodo_b = grafo.find_node("B")
     print(nodo_b.number_of_neighbors())
-    for nodo in grafo.nodes:
-        pass
+    for vecino, peso in nodo_b.neighbors:
+        print(f"   {vecino.value} (coste {peso})")
+
+        # 2. ¿Están conectados G y H?
+    print("2. ¿G y H están conectados?", grafo.are_connected("G", "H"))
+
+    # 3. ¿Están conectados D y E?
+    print("3. ¿D y E están conectados?", grafo.are_connected("D", "E"))
+
+    # 4. Número de nodos del grafo
+    print("4.", grafo.number_of_nodes())
+
+    # 5. Lista de nodos del grafo
+    print("5. Lista de nodos del grafo:")
+    print(grafo)
 
 
 
