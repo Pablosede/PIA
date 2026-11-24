@@ -1,8 +1,9 @@
 from graph import Node, Graph
-from math import inf   
+from math import inf
+
 
 class AStar:
-  """
+    """
     This class used to represent the Greedy algorithm
     ...
     Attributes
@@ -44,34 +45,33 @@ class AStar:
         Implements the core of algorithm. This method searches, in the search space of the problem, a solution 
     """
 
-  def __init__(self, graph, start_position, target):
-    self.graph = graph
-    self.start = graph.find_node(start_position)
-    self.target = graph.find_node(target)
-    self.opened = []
-    self.closed = []
-    self.number_of_steps = 0
+    def __init__(self, graph, start_position, target, mostrar_pasos=False):
+        self.graph = graph
+        self.mostrar_pasos = mostrar_pasos  # Ejercicio 7: True para ver cada iteración
+        self.start = graph.find_node(start_position)
+        self.target = graph.find_node(target)
+        self.opened = []
+        self.closed = []
+        self.number_of_steps = 0
 
-
-  def manhattan_distance(self, node1, node2):
-    """
+    def manhattan_distance(self, node1, node2):
+        """
       Calculate and return the manhattan_distance between the two given nodes
       Parameters
       ----------
       node1 : Node
-        Represent the first node 
+        Represent the first node
       node2 : Node
         Represent the second node
       ...
-      Return 
+      Return
       ------
         int
     """
-    return abs(node1.x - node2.x) + abs(node1.y - node2.y)
+        return abs(node1.x - node2.x) + abs(node1.y - node2.y)
 
-
-  def calculate_distance(self, parent, child):
-    """
+    def calculate_distance(self, parent, child):
+        """
       Calculate and return the distance from the start to child node. If the heuristic value was already calculated
       and is smaller than the new value, the method return the old value. Otherwise the method return the new value
       and note the parent as the parent node of child
@@ -82,23 +82,23 @@ class AStar:
       child : Node
         Represent the child node
       ...
-      Return 
+      Return
       ------
         int
     """
-    for neighbor in parent.neighbors:
-      if neighbor[0] == child:
-        distance = parent.distance_from_start + neighbor[1]
-        if distance < child.distance_from_start:
-          child.parent = parent
-          child.distance_from_start=distance
-          return distance
-        
-        return child.distance_from_start
+        for neighbor in parent.neighbors:
+            if neighbor[0] == child:
+                distance = parent.distance_from_start + neighbor[1]
+                if distance < child.distance_from_start:
+                    child.parent = parent
+                    child.distance_from_start = distance
+                    return distance
 
-  def calculate_heuristic_value(self, parent, child, target):
-    """
-      Calculate and return the heuristic value of a node which is the sum of the 
+                return child.distance_from_start
+
+    def calculate_heuristic_value(self, parent, child, target):
+        """
+      Calculate and return the heuristic value of a node which is the sum of the
       manhattan distance to the target node and the distance from the initial node
       ...
       Parameters
@@ -113,42 +113,39 @@ class AStar:
       -------
         int
     """
-    return self.calculate_distance(parent, child) + self.manhattan_distance(child, target)
-    
-  
-  def insert_to_list(self, list_category, node):
-    """
+        return self.calculate_distance(parent, child) + self.manhattan_distance(child, target)
+
+    def insert_to_list(self, list_category, node):
+        """
       Insert a node in the proper list (opened or closed) according to list_category
       Parameters
       ----------
       list_category : str
-          Determines the list in which the node will be appened. If the value is 'open' 
+          Determines the list in which the node will be appened. If the value is 'open'
           the node is appended in the opened list. Otherwise, the node is appended in the closed list
       node : Node
           The node of the problem that will be added to the frontier
     """
-    if list_category == "open":
-      self.opened.append(node)
-    else:
-      self.closed.append(node)
-  
+        if list_category == "open":
+            self.opened.append(node)
+        else:
+            self.closed.append(node)
 
-  def remove_from_opened(self):
-    """
+    def remove_from_opened(self):
+        """
       Remove the node with the smallest heuristic value from the opened list
       Then add the removed node to the closed list
       Returns
       -------
         Node
     """
-    self.opened.sort()
-    node = self.opened.pop(0)
-    self.closed.append(node)
-    return node
+        self.opened.sort()
+        node = self.opened.pop(0)
+        self.closed.append(node)
+        return node
 
-
-  def opened_is_empty(self):
-    """
+    def opened_is_empty(self):
+        """
       Check if the the list opened is empty, so no solution found
       Returns
       -------
@@ -156,11 +153,10 @@ class AStar:
         True if the list opened is empty
         False if the list opened is not empty
     """
-    return len(self.opened) == 0
+        return len(self.opened) == 0
 
-
-  def get_old_node(self, node_value):
-    """
+    def get_old_node(self, node_value):
+        """
       Return the node with the given value from the opened list,
       to compare its heuristic_value with a node with the same value
       ...
@@ -172,14 +168,13 @@ class AStar:
       -------
         Node
     """
-    for node in self.opened:
-      if node.value == node_value:
-        return node
-    return None 
-      
+        for node in self.opened:
+            if node.value == node_value:
+                return node
+        return None
 
-  def calculate_path(self, target_node):
-    """
+    def calculate_path(self, target_node):
+        """
       Calculate and return the path (solution) of the problem
       ...
       Parameters
@@ -190,18 +185,17 @@ class AStar:
       -------
         list
     """
-    path = [target_node.value]
-    node = target_node.parent
-    while True:
-      path.append(node.value)
-      if node.parent is None:
-        break
-      node = node.parent
-    return path
+        path = [target_node.value]
+        node = target_node.parent
+        while True:
+            path.append(node.value)
+            if node.parent is None:
+                break
+            node = node.parent
+        return path
 
-
-  def calculate_cost(self, path):
-    """
+    def calculate_cost(self, path):
+        """
       Calculate and return the total cost of the path
       ...
       Parameters
@@ -212,59 +206,82 @@ class AStar:
       -------
         int
     """
-    total_cost = 0
-    for i in range(len(path) - 1):
-      child = self.graph.find_node(path[i])
-      parent = self.graph.find_node(path[i+1])
-      
-      for neighbor in child.neighbors:
-        # Structure of neighbor(Node, weight)
-        if neighbor[0] == parent:
-          total_cost += neighbor[1]
+        total_cost = 0
+        for i in range(len(path) - 1):
+            child = self.graph.find_node(path[i])
+            parent = self.graph.find_node(path[i + 1])
 
-    return total_cost
-      
+            for neighbor in child.neighbors:
+                # Structure of neighbor(Node, weight)
+                if neighbor[0] == parent:
+                    total_cost += neighbor[1]
 
-  def search(self):
+        return total_cost
+
+    def lista_a_texto(self, lista):
+        """
+      Ejercicio 7: devuelve una lista de nodos con el formato de la tabla,
+      por ejemplo {(A,4),(C,6)}
     """
+        elementos = [f"({nodo.value},{nodo.heuristic_value})" for nodo in lista]
+        return "{" + ",".join(elementos) + "}"
+
+    def search(self):
+        """
       Is the main algorithm. Search for a solution in the solution space of the problem
-      Stops if the opened list is empty, so no solution found or if it find a solution. 
+      Stops if the opened list is empty, so no solution found or if it find a solution.
       ...
       Return
       ------
         list
     """
-    # Calculate the heuristic value of the starting node
-    # The distance from the starting node is 0 so only manhattan_distance is calculated
-    self.start.distance_from_start = 0
-    self.start.heuristic_value = self.manhattan_distance(self.start, self.target)
-    # Add the starting point to opened list
-    self.opened.append(self.start)
+        # Calculate the heuristic value of the starting node
+        # The distance from the starting node is 0 so only manhattan_distance is calculated
+        self.start.distance_from_start = 0
+        self.start.heuristic_value = self.manhattan_distance(self.start, self.target)
+        # Add the starting point to opened list
+        self.opened.append(self.start)
 
-    while True:
-      self.number_of_steps += 1
+        while True:
+            self.number_of_steps += 1
 
-      if self.opened_is_empty():
-        print(f"No Solution Found after {self.number_of_steps} steps!!!")
-        break
-        
-      selected_node = self.remove_from_opened()
+            if self.opened_is_empty():
+                print(f"No Solution Found after {self.number_of_steps} steps!!!")
+                break
 
-      # check if the selected_node is the solution
-      if selected_node == self.target:
-        path = self.calculate_path(selected_node)
-        total_cost = self.calculate_cost(path)
-        path.reverse()
-        return path, total_cost
+            # Ejercicio 7: mostrar las listas antes de seleccionar el nodo
+            if self.mostrar_pasos:
+                self.opened.sort()  # ordenada de menor a mayor f, como en la tabla
+                print(f"Iteración {self.number_of_steps}")
+                print("  Lista abierta:", self.lista_a_texto(self.opened))
+                print("  Lista cerrada:", self.lista_a_texto(self.closed))
 
-      # extend the node
-      new_nodes = selected_node.extend_node()
+            selected_node = self.remove_from_opened()
 
-      # add the extended nodes in the list opened
-      if len(new_nodes) > 0:
-        for new_node in new_nodes:
-          new_node.heuristic_value = self.calculate_heuristic_value(selected_node, new_node, self.target)
-          if new_node not in self.closed and new_node not in self.opened:
-            new_node.parent = selected_node
-            self.insert_to_list("open", new_node)
-          
+            if self.mostrar_pasos:
+                print("  Nodo seleccionado:", selected_node.value)
+
+            # check if the selected_node is the solution
+            if selected_node == self.target:
+                if self.mostrar_pasos:
+                    print("  Nodos hijos: - (es el objetivo)")
+                path = self.calculate_path(selected_node)
+                total_cost = self.calculate_cost(path)
+                path.reverse()
+                return path, total_cost
+
+            # extend the node
+            new_nodes = selected_node.extend_node()
+
+            # Ejercicio 7: mostrar los hijos (sin los de la lista cerrada)
+            if self.mostrar_pasos:
+                hijos = [n.value for n in new_nodes if n not in self.closed]
+                print("  Nodos hijos:", ", ".join(hijos) if hijos else "ninguno")
+
+            # add the extended nodes in the list opened
+            if len(new_nodes) > 0:
+                for new_node in new_nodes:
+                    new_node.heuristic_value = self.calculate_heuristic_value(selected_node, new_node, self.target)
+                    if new_node not in self.closed and new_node not in self.opened:
+                        new_node.parent = selected_node
+                        self.insert_to_list("open", new_node)
